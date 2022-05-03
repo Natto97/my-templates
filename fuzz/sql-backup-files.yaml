@@ -1,0 +1,31 @@
+id: default-sql-dump
+
+info:
+  name: MySQL Dump Files
+  author: Natto97
+  severity: critical
+  tags: exposure,backup,mysql,fuzz
+
+requests:
+  - method: GET
+    threads: 10
+    path:
+      - "{{BaseURL}}/{{Paths}}"
+    headers:
+      Range: "bytes=0-3000"
+    payloads:
+      Paths: helpers/wordlists/sqlfile.txt
+
+    max-size: 2000  # Size in bytes - Max Size to read from server response
+    matchers-condition: and
+    matchers:
+      - type: regex
+        regex:
+          - "(?m)(?:DROP|CREATE|(?:UN)?LOCK) TABLE|INSERT INTO"
+        part: body
+
+      - type: status
+        status:
+          - 200
+          - 206
+        condition: or

